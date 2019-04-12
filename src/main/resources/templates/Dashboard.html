@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>DashBoard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <!--<link rel="stylesheet" type="text/js" href="login.js"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/css/DashBoard.css" th:href="@{/css/DashBoard.css}">
+    <link rel="stylesheet" href="../static/css/Header.css" th:href="@{/css/Header.css}">
+
+    <script type="text/javascript" src="../static/js/Dashboard.js" th:src="@{/js/Dashboard.js}"></script>
+</head>
+
+<body>
+<div class="container-fluid">
+
+    <nav class="navbar-expand-lg navbar-default bg-light col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"
+         style="position: fixed;">
+        <img src="http://reap.tothenew.com/assets/reap-ed280031215032f3350f114b95893a51.png"
+             class="">
+        <img src="http://reap.tothenew.com/assets/text_footer-8f0e1eb9c8ec931dcc66dbcdc631fe64.png"
+             class="" style="width: 35%; margin-right: 100px">
+        <a href="#">
+            <button class="btn btn-nav" type="button" style="margin-right: 20px; font-size: 17px;">
+                Back to Newers World
+            </button>
+        </a>
+        <a th:href="@{/reap/dashboard}">
+            <button class="btn" type="button" id="btn-nav-active" style="margin-right: 20px; font-size: 17px;">
+                <img class="navBarButton" src="http://reap.tothenew.com/assets/ico-dashboard-5dff3444ebd21480dadfeeb0f0598268.png">
+                Dashboard
+            </button>
+        </a>
+        <a th:href="@{/reap/badges}">
+            <button class="btn btn-nav" type="button" style="font-size: 17px;">
+                <img src="http://reap.tothenew.com/assets/ico-badge-f806ef61da2bf4d67425de6f36f427a9.png">
+                Badges
+            </button>
+        </a>
+        <div class="dropdown">
+            <button type="button" class="dropdown-toggle" data-toggle="dropdown"
+                    style="border: 0;border-radius: 50%;padding: 0">
+                <img th:src="${loggedInUser.getProfilePhoto()}"
+                     class="notification"></button>
+            <div class="dropdown-menu dropdown-menu-right"
+                 style="min-width: 612px;padding-bottom: 0px;margin-top: 12px;">
+
+                <div style="font-size: xx-large">Your Profile</div>
+                <img th:src="${loggedInUser.getProfilePhoto()}"
+                     style="float: left;width: 122px;height: 122px;margin-bottom: 10px">
+                <div style="overflow: auto">
+                    <span class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                          style="font-size: large;">Newers Name :</span>
+                    <span th:text="${loggedInUser.getFirstName()}+' '+${loggedInUser.getLastName()}" class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8"
+                          style="font-size: large;"></span>
+                </div>
+                <div style="overflow: auto">
+                    <span class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4" style="font-size: large;">Email-id :</span>
+                    <span th:text="${loggedInUser.getEmail()}" class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8" style="font-size: large;"></span>
+                </div>
+                <div style="display: block;clear: left;overflow: hidden;background-color: #f4f4f4;padding: 10px">
+                    <button class="btn btn-secondary"
+                            style="float: left;background-color: #f4f4f4;padding-bottom: 0px;border: 0px;alignment: center">
+                        Users
+                    </button>
+                    <a th:href="@{/reap/logout}">
+                    <button class="btn btn-secondary"
+                            style="float: right;background-color: #f4f4f4;padding-bottom: 0px;border: 0px">Log Out
+                    </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
+        <div class="panel panel-info" style="margin-top: 8%">
+            <div class="panel-heading">
+                <div class="panel-title">RECOGNIZE NEWERS</div>
+            </div>
+
+            <div style="padding-top:30px" class="panel-body">
+
+                <div style="margin-bottom: 25px;">
+                    <span class="input-group" style="width: 50%;display: inline-table">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input id="login-username" type="text" class="form-control" name="username" value=""
+                           placeholder="Select a Newer">
+                        </span>
+
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" id="content">Select A Badges
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="#" id="goldBadge"><img
+                                    src="http://reap.tothenew.com/assets/ico-badge-orange-7487656ca410c0f2051788659278f212.png">Gold</a>
+                            <a href="#" id="silverBadge"><img
+                                    src="http://reap.tothenew.com/assets/ico-badge-grey-6e2741b0311f87111d40aac66392bf22.png">Silver</a>
+                            <a href="#" id="bronzeBadge"><img
+                                    src="http://reap.tothenew.com/assets/ico-badge-brown-6e5dc638c4ee9eef490cfcb0a5cce103.png">Bronze</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Reason:</label>
+                    <textarea class="form-control" rows="5" id="comment"
+                              placeholder="Please select a karma/core value first....."
+                              style="resize: none;"></textarea>
+                </div>
+                <button type="button" class="btn btn-default"
+                        style="float: right;background-color: #0e5a80;color: white">
+                    Recognize
+                </button>
+            </div>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Wall Of Frames
+                    <input type="text" placeholder="Search.." name="search" style="color: black;margin-left: 1%">
+                    <button class="btn btn-secondary" type="submit"
+                            style="background-color: transparent;color: white;border: 0px"><i class="fa fa-search"
+                                                                                              aria-hidden="true"></i>
+                    </button>
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                </div>
+            </div>
+
+            <div style="padding-top:30px" class="panel-body">
+
+                <div style="margin-bottom: 25px;">
+                    <span class="input-group" style="width: 50%;display: inline-table">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input id="" type="text" class="form-control" name="username" value=""
+                           placeholder="Select a Newer">
+                        </span>
+
+
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" id="content1">Select A Badges
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="#" id="goldBadge1"><img
+                                    src="http://reap.tothenew.com/assets/ico-badge-orange-7487656ca410c0f2051788659278f212.png">Gold</a>
+                            <a href="#" id="silverBadge1"><img
+                                    src="http://reap.tothenew.com/assets/ico-badge-grey-6e2741b0311f87111d40aac66392bf22.png">Silver</a>
+                            <a href="#" id="bronzeBadge1"><img
+                                    src="http://reap.tothenew.com/assets/ico-badge-brown-6e5dc638c4ee9eef490cfcb0a5cce103.png">Bronze</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3" style="z-index: 2;position:fixed;margin-left: 75%">
+        <div class="panel panel-info" id="leftPersonInfo">
+            <div class="panel-heading">
+                <div class="panel-title">MY BADGES</div>
+            </div>
+
+            <div class="panel-body">
+                <div>
+                    <div>
+                        <img th:src="${loggedInUser.getProfilePhoto()}"
+                             class="notification" style="float: left;">
+                        <span th:text="${loggedInUser.getFirstName()}+' '+${loggedInUser.getLastName()}" style="font-size: 16px;font-weight: bold;margin-left: 15%"></span>
+                        <div style="">
+                            <img src="http://reap.tothenew.com/assets/ico-badge-orange-7487656ca410c0f2051788659278f212.png"
+                                 style="margin-left: 2%">
+                            <img src="http://reap.tothenew.com/assets/ico-badge-grey-6e2741b0311f87111d40aac66392bf22.png"
+                                 style="margin-left: 15%">
+                            <img src="http://reap.tothenew.com/assets/ico-badge-brown-6e5dc638c4ee9eef490cfcb0a5cce103.png"
+                                 style="margin-left: 15%">
+                        </div>
+                        <div>
+                            <span th:text="${loggedInUser.getGoldBadgeCount()}" style="font-size: 16px;margin-left: 3%"></span>
+                            <span th:text="${loggedInUser.getSilverBadgeCount()}" style="font-size: 16px;margin-left: 20%"></span>
+                            <span th:text="${loggedInUser.getBronzeBadgeCount()}" style="font-size: 16px;margin-left: 20%"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
