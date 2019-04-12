@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ttn.reap.enums.Role;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -13,8 +12,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@JsonIgnoreProperties(value = {"password", "confirmPassword", "isActive"})
-@NamedNativeQuery(name = "Employee.findBynameNamedNative", query = "select * from Employee where firstName= :name OR lastName= :name", resultClass = Employee.class)
+@JsonIgnoreProperties(value = {"password", "isActive"})
+@NamedNativeQuery(name = "Employee.getAllUsers",query = "select * from employee e where e.first_name LIKE :pattern OR e.last_name LIKE :pattern",resultClass = Employee.class)
 public class Employee {
 
     @Id
@@ -22,13 +21,11 @@ public class Employee {
     private Integer id;
 
     @NotBlank(message = "First Name field is empty!")
-    @Size(min = 2, message = "First Name should have at least 2 characters")
-    @Column(name = "first_name")
+    @Size(min = 3, message = "First Name should have at least 2 characters")
     private String firstName;
 
     @NotBlank(message = "Last name field is empty!")
-    @Size(min = 2, message = "Last Name should have at least 2 characters")
-    @Column(name = "last_name")
+    @Size(min = 3, message = "Last Name should have at least 2 characters")
     private String lastName;
 
     String profilePhoto;
@@ -39,28 +36,29 @@ public class Employee {
 
     @NotBlank
     @Pattern(regexp = "(^$|[0-9]{10})", message = "Enter a valid contact no")
-    @Column(name = "contact_number")
     private String contactNumber;
 
     @NotBlank
     @Size(min = 3, max = 20, message = "Password should be at least 3 characters in length")
     private String password;
 
-    @Transient
-    private String confirmPassword;
-
     @CreationTimestamp
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "reset_token")
-    private String resetToken;
-
     @UpdateTimestamp
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     private Boolean isActive;
+
+    private String resetToken;
+
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
+    }
 
     private Integer goldBadgeCount;
     private Integer silverBadgeCount;
@@ -69,6 +67,9 @@ public class Employee {
     private Integer noOfGoldBadgeEarned;
     private Integer noOfSilverBadgeEarned;
     private Integer noOfBronzeBadgeEarned;
+
+
+
     private Integer points = 0;
 
     @ElementCollection
@@ -83,6 +84,7 @@ public class Employee {
     }
 
     public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto=profilePhoto;
     }
 
     public Integer getId() {
@@ -131,22 +133,6 @@ public class Employee {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
-
-    public String getResetToken() {
-        return resetToken;
-    }
-
-    public void setResetToken(String resetToken) {
-        this.resetToken = resetToken;
     }
 
     public LocalDateTime getCreatedAt() {

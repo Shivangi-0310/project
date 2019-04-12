@@ -8,12 +8,14 @@ import com.ttn.reap.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 
 @Controller
@@ -24,15 +26,18 @@ public class LoginController {
     EmployeeService employeeService;
 
     @RequestMapping("/login")
-    public String goToLogin(Model model) {
+    public String redirectLogin(Model model) {
         model.addAttribute("loggedInUser", new LoggedInUserDetails());
         return "login";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String verifyLoginCredentials(@ModelAttribute("loggedInUser") Employee loggedUser,
-                              HttpSession session, RedirectAttributes redirectAttributes) throws IOException {
-
+    public String verifyLogin(@Valid @ModelAttribute("loggedInUser") Employee loggedUser,
+                              HttpSession session, RedirectAttributes redirectAttributes, BindingResult bindingResult) throws IOException {
+        if (bindingResult.hasErrors()) {
+            System.out.println("ERROR ERROR ERROR");
+            return "login";
+        }
         try {
             Employee employee = employeeService.loginEmployee(loggedUser.getEmail(), loggedUser.getPassword());
             LoggedInUserDetails loggedInUser = new LoggedInUserDetails();

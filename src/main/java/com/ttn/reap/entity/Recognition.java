@@ -1,6 +1,5 @@
 package com.ttn.reap.entity;
 
-
 import com.ttn.reap.enums.Badge;
 
 import javax.persistence.*;
@@ -14,10 +13,10 @@ public class Recognition {
     private Integer id;
 
     @OneToOne
-    Employee recognizerId;
+    Employee recognizeeId;
 
     @OneToOne
-    Employee recognizeeId;
+    Employee recognizerEmployeeId;
 
     private String message;
 
@@ -35,20 +34,20 @@ public class Recognition {
         this.id = id;
     }
 
-    public Employee getRecognizerId() {
-        return recognizerId;
-    }
-
-    public void setRecognizerId(Employee recognizerId) {
-        this.recognizerId = recognizerId;
-    }
-
     public Employee getRecognizeeId() {
         return recognizeeId;
     }
 
     public void setRecognizeeId(Employee recognizeeId) {
         this.recognizeeId = recognizeeId;
+    }
+
+    public Employee getRecognizerEmployeeId() {
+        return recognizerEmployeeId;
+    }
+
+    public void setRecognizerEmployeeId(Employee recognizerEmployeeId) {
+        this.recognizerEmployeeId = recognizerEmployeeId;
     }
 
     public String getMessage() {
@@ -82,12 +81,11 @@ public class Recognition {
     public String toString() {
         return "Recognition{" +
                 "id=" + id +
-                ", recognizerId=" + recognizerId +
                 ", recognizeeId=" + recognizeeId +
+                ", recognizerEmployeeId=" + recognizerEmployeeId +
                 ", message='" + message + '\'' +
                 ", dateOfRecognition=" + dateOfRecognition +
                 ", badge=" + badge +
                 '}';
     }
-
 }

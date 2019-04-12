@@ -16,19 +16,23 @@ public class ReapInterceptor extends HandlerInterceptorAdapter {
         // Avoid a redirect loop for some urls
         HttpSession session = request.getSession(false);
 
+        if(request.getRequestURI().contains("/api"))
+            return  true;
+
         if (!request.getRequestURI().equals("/reap/login")
                 && !request.getRequestURI().equals("/reap/register")
-                && !request.getRequestURI().endsWith(".css")
-                && !request.getRequestURI().endsWith(".png")
-                && !request.getRequestURI().endsWith(".jpg")
-                && !request.getRequestURI().endsWith(".jpeg")
+                &&!request.getRequestURI().endsWith(".css")
+                &&!request.getRequestURI().endsWith(".png")
+                &&!request.getRequestURI().endsWith(".jpg")
+                &&!request.getRequestURI().endsWith(".jpeg")
                 && !request.getRequestURI().equals("/reap/forgotpwd")
                 && !request.getRequestURI().equals("/reap/reset")) {
             LoggedInUserDetails employee = (LoggedInUserDetails) request.getSession().getAttribute("loggedInUser");
             if (employee == null) {
                 response.sendRedirect("/reap/login");
                 return false;
-            } else if (request.getRequestURI().equals("/reap/logout")) {
+            }
+            else if(request.getRequestURI().equals("/reap/logout")){
                 request.getSession().invalidate();
                 response.sendRedirect("/reap/login");
                 return false;

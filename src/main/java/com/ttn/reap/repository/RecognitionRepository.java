@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RecognitionRepository extends JpaRepository<Recognition, Integer> {
-
-    public List<Recognition> findAll();
-
-    public Optional<Recognition> findByMessage(String message);
+public interface RecognitionRepository extends JpaRepository<Recognition,Integer> {
+    List<Recognition> findAll();
+//    Optional<Recognition> findByEmail(String emailId);
+//    Optional<Recognition> findByFirstname(String firstname);
+//    Optional<Recognition> findByLastname(String lastname);
+    Optional<Recognition> findByMessage(String message);
 }

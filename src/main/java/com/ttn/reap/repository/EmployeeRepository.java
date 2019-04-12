@@ -19,14 +19,13 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     public Optional<Employee> findByEmailAndPassword(String emailId, String password);
 
-    public Optional<List<Employee>> findByEmailLike(String emailPattern);
+    public Optional<Employee> findByResetToken(String token);
 
-    public Optional<List<Employee>> findByfirstNameStartingWith(String firstName);
+//    public Optional<List<Employee>> findByfirstNameStartingWithOrLastNameStartingWith(String firstName,String lastName);
 
-    Optional<Employee> findByResetToken(String resetToken);
+    public Optional<List<Employee>> getAllUsers(@Param("pattern") String pattern);
 
 
-// public Optional<List<Employee>> findBynameNamedNative(@Param("name") String name);
 
 
 

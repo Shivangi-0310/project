@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class RevokeRecognitionService {
 
     @Autowired
-    private RevokeRecognitionDetailsRepository revokeRecognitionDetailsRepository;
+    RevokeRecognitionDetailsRepository revokeRecognitionDetailsRepository;
 
     
 }

@@ -4,8 +4,8 @@ import com.ttn.reap.enums.ExceptionStatus;
 
 public class EmployeeException extends Exception
 {
-    private ExceptionStatus exceptionStatus;
-    private String errorMessage;
+    ExceptionStatus exceptionStatus;
+    String errorMessage;
 
     public EmployeeException(String msg){
         super(msg);

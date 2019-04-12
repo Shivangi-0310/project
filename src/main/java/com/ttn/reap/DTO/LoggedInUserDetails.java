@@ -1,31 +1,18 @@
 package com.ttn.reap.DTO;
 
 public class LoggedInUserDetails {
-
     private Integer id;
-
     private String firstName;
-
     private String lastName;
-
     private String profilePhoto;
-
     private String email;
-
     private Integer goldBadgeCount;
-
     private Integer silverBadgeCount;
-
     private Integer bronzeBadgeCount;
-
     private Integer noOfGoldBadgeEarned;
-
     private Integer noOfSilverBadgeEarned;
-
     private Integer noOfBronzeBadgeEarned;
-
     private Integer points;
-
     private String password;
 
     public String getPassword() {
@@ -153,10 +140,9 @@ public class LoggedInUserDetails {
     public LoggedInUserDetails() {
     }
 
-    public void setAllBadges(Integer goldBadgeCount, Integer silverBadgeCount,
+    public void setAllBadges(Integer goldBadgeCount,Integer silverBadgeCount,
                              Integer bronzeBadgeCount, Integer noOfGoldBadgeEarned,
-                             Integer noOfSilverBadgeEarned, Integer noOfBronzeBadgeEarned) {
-
+                             Integer noOfSilverBadgeEarned, Integer noOfBronzeBadgeEarned){
         this.setGoldBadgeCount(goldBadgeCount);
         this.setSilverBadgeCount(silverBadgeCount);
         this.setBronzeBadgeCount(bronzeBadgeCount);

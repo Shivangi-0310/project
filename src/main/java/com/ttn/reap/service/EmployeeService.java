@@ -1,5 +1,6 @@
 package com.ttn.reap.service;
 
+import com.ttn.reap.DTO.EmployeeSearchDTO;
 import com.ttn.reap.enums.Badge;
 import com.ttn.reap.entity.Employee;
 import com.ttn.reap.enums.ExceptionStatus;
@@ -8,8 +9,10 @@ import com.ttn.reap.exception.EmployeeException;
 import com.ttn.reap.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,8 +29,9 @@ public class EmployeeService {
     EmployeeRepository employeeRepository;
 
     //    saving an employee with other internal details into the db while registration!
-    public Employee saveEmployee(Employee employee, MultipartFile multipartFile)
+    public Employee saveEmployee(@Valid Employee employee, MultipartFile multipartFile)
             throws IOException, EmployeeException {
+
         if (employeeRepository.findByEmail(employee.getEmail()) != null) {
             throw new EmployeeException("Email Already Registered", ExceptionStatus.EMPLOYEE_ALREADY_EXIST);
         }
@@ -35,6 +39,7 @@ public class EmployeeService {
         employee.getRoleSet().add(Role.USER);
         setBadges(employee);
         String photoPath = saveProfilePhotoPath(multipartFile);
+        System.out.println(photoPath);
         employee.setProfilePhoto(photoPath);
         employee.setNoOfBronzeBadgeEarned(0);
         employee.setNoOfSilverBadgeEarned(0);
@@ -45,12 +50,8 @@ public class EmployeeService {
 
     }
 
-    public Employee updateEmployeePassword(Employee employee){
-        return employeeRepository.save(employee);
-    }
-
     //    setting badges employee are allowed to give based on their roles
-    Employee setBadges(Employee employee) {
+    Employee setBadges(@Valid Employee employee) {
         if (employee.getRoleSet().contains(Role.PRACTICE_HEAD)) {
             employee.setGoldBadgeCount(3);
             employee.setSilverBadgeCount(6);
@@ -68,8 +69,8 @@ public class EmployeeService {
     }
 
 
-    //    for calculating points of employees based on their no of badge earned.
-    Integer calculatePoints(Employee employee) {
+    //    for calcuting points of employees based on their no of badge earned.
+    Integer calculatePoints(@Valid Employee employee) {
         Integer points;
         points = employee.getNoOfGoldBadgeEarned() * Badge.GOLD.getBadgeWeight() +
                 employee.getNoOfSilverBadgeEarned() * Badge.SILVER.getBadgeWeight()
@@ -101,11 +102,6 @@ public class EmployeeService {
         return employeeRepository.findByLastName(lastname);
     }
 
-
-    public Optional findEmployeeByResetToken(String resetToken) {
-        return employeeRepository.findByResetToken(resetToken);
-    }
-
     //    for saving profile picture uploaded by the employee while registration
     public String saveProfilePhotoPath(MultipartFile profilePhoto) throws IOException {
 
@@ -128,22 +124,31 @@ public class EmployeeService {
         return employee.get();
     }
 
-//    public List<EmployeeSearchDTO> findByFirstnameStartingWith(String firstName) throws EmployeeException {
-//        Optional<List<Employee>> employees = employeeRepository.findByfirstNameStartingWith(firstName);
-//
-//        if (!employees.isPresent()) {
-//            throw new EmployeeException("No Data found", ExceptionStatus.NO_DATA_FOUND);
-//        }
-//        List<EmployeeSearchDTO> empData = new ArrayList<>();
-//        employees.get().stream().forEach(employee -> {
-//            EmployeeSearchDTO emp = new EmployeeSearchDTO();
-//            emp.setFullName(employee.getFirstName() + " " + employee.getLastName());
-//            emp.setEmail(employee.getEmail());
-//            emp.setProfilePic(employee.getProfilePhoto());
-//            empData.add(emp);
-//        });
-//
-//        return empData;
-//
-//    }
+    public List<EmployeeSearchDTO> findByFirstnameStartingWith(String pattern) throws EmployeeException {
+        Optional<List<Employee>> employees = employeeRepository.getAllUsers(pattern + "%");
+
+        if (!employees.isPresent()) {
+            throw new EmployeeException("No Data found", ExceptionStatus.NO_DATA_FOUND);
+        }
+        List<EmployeeSearchDTO> empData = new ArrayList<>();
+        employees.get().stream().forEach(employee -> {
+            EmployeeSearchDTO emp = new EmployeeSearchDTO();
+            emp.setFullName(employee.getFirstName() + " " + employee.getLastName());
+            emp.setEmail(employee.getEmail());
+            emp.setProfilePic(employee.getProfilePhoto());
+            empData.add(emp);
+        });
+        return empData;
+    }
+
+    // save employee after reseting password
+    public Employee updateEmployeePassword(Employee employee) {
+        return employeeRepository.save(employee);
+    }
+
+    public Optional findEmployeeByResetToken(String resetToken) {
+        return employeeRepository.findByResetToken(resetToken);
+    }
+
+
 }

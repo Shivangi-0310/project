@@ -5,6 +5,8 @@ import com.ttn.reap.exception.EmployeeException;
 import com.ttn.reap.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 
 @Controller
@@ -27,16 +30,20 @@ public class SignupController {
     private HttpServletRequest request;
 
     @RequestMapping("/register")
-    public String goToSignup() {
+    public String redirectSignup(Model model) {
+
+        model.addAttribute("employee",new Employee());
         return "signup";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String getRegistration(@ModelAttribute("employee") Employee employee, @RequestParam("profilePic") MultipartFile profilePic,
-                                  RedirectAttributes redirectAttributes, HttpSession session) throws IOException {
-        System.out.println(employee);
+    public String getRegistration(@Valid @ModelAttribute("employee") Employee employee, @RequestParam("profilePic") MultipartFile profilePic,
+                                  RedirectAttributes redirectAttributes, HttpSession session, BindingResult bindingResult) throws IOException {
+
         try {
-            if (employeeService.saveEmployee(employee, profilePic) == null){
+            if (bindingResult.hasErrors()) {
+                System.out.println("ERROR ERROR ERROR");
+            }else if(employeeService.saveEmployee(employee, profilePic) == null){
                 redirectAttributes.addFlashAttribute("isRegistered", false);
             }
         } catch (EmployeeException e) {
@@ -44,6 +51,7 @@ public class SignupController {
             redirectAttributes.addFlashAttribute("exception", e);
             return "redirect:register";
         }
+
         return "successfulsignup";
     }
 }

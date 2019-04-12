@@ -14,5 +14,4 @@ public class ItemController {
         model.addAttribute("loggedInUser",session.getAttribute("loggedInUser"));
         return "Items";
     }
-
 }

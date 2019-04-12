@@ -12,12 +12,8 @@ public class DashboardController {
 
 
     @RequestMapping("/dashboard")
-    public String showDashboard(Model model, HttpSession session) {
-        model.addAttribute("loggedInUser",session.getAttribute("loggedInUser"));
+    public String redirectDashboard(Model model, HttpSession session) {
+        model.addAttribute("loggedInUser", session.getAttribute("loggedInUser"));
         return "Dashboard";
     }
-
-
-
-
 }

@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 public class Bootstrap {
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    EmployeeRepository employeeRepository;
 
     @EventListener(ContextRefreshedEvent.class)
-    public void setUp() {
+    void setUp(){
     }
 
 

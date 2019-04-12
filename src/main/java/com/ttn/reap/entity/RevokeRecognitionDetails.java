@@ -18,6 +18,7 @@ public class RevokeRecognitionDetails {
     private boolean isEmailSent;
 
     @OneToOne
+    @JoinColumn(name="revoked_recognition")
     Recognition recognition;
 
     public Integer getRevokeId() {
