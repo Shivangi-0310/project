@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ttn.reap.enums.Role;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -13,7 +14,7 @@ import java.util.Set;
 
 @Entity
 @JsonIgnoreProperties(value = {"password", "confirmPassword", "isActive"})
-//@NamedNativeQuery(name = "Employee.FindByName",query = "select * from Employee where firstName= :name OR lastName= :name",resultClass = Employee.class)
+@NamedNativeQuery(name = "Employee.findBynameNamedNative", query = "select * from Employee where firstName= :name OR lastName= :name", resultClass = Employee.class)
 public class Employee {
 
     @Id
@@ -22,10 +23,12 @@ public class Employee {
 
     @NotBlank(message = "First Name field is empty!")
     @Size(min = 2, message = "First Name should have at least 2 characters")
+    @Column(name = "first_name")
     private String firstName;
 
     @NotBlank(message = "Last name field is empty!")
     @Size(min = 2, message = "Last Name should have at least 2 characters")
+    @Column(name = "last_name")
     private String lastName;
 
     String profilePhoto;
@@ -36,6 +39,7 @@ public class Employee {
 
     @NotBlank
     @Pattern(regexp = "(^$|[0-9]{10})", message = "Enter a valid contact no")
+    @Column(name = "contact_number")
     private String contactNumber;
 
     @NotBlank
@@ -46,29 +50,29 @@ public class Employee {
     private String confirmPassword;
 
     @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "reset_token")
+    private String resetToken;
+
     @UpdateTimestamp
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     private Boolean isActive;
 
     private Integer goldBadgeCount;
-
     private Integer silverBadgeCount;
-
     private Integer bronzeBadgeCount;
 
     private Integer noOfGoldBadgeEarned;
-
     private Integer noOfSilverBadgeEarned;
-
     private Integer noOfBronzeBadgeEarned;
-
     private Integer points = 0;
 
     @ElementCollection
-//    @Enumerated(EnumType.STRING)
+// @Enumerated(EnumType.STRING)
     private Set<Role> roleSet = new HashSet<>();
 
     public Employee() {
@@ -79,11 +83,14 @@ public class Employee {
     }
 
     public void setProfilePhoto(String profilePhoto) {
-        this.profilePhoto = profilePhoto;
     }
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -126,20 +133,44 @@ public class Employee {
         this.password = password;
     }
 
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public Boolean getActive() {
         return isActive;
     }
 
     public void setActive(Boolean active) {
         isActive = active;
-    }
-
-    public Set<Role> getRoleSet() {
-        return roleSet;
-    }
-
-    public void setRoleSet(Set<Role> roleSet) {
-        this.roleSet = roleSet;
     }
 
     public Integer getGoldBadgeCount() {
@@ -166,30 +197,6 @@ public class Employee {
         this.bronzeBadgeCount = bronzeBadgeCount;
     }
 
-    public Integer getPoints() {
-        return points;
-    }
-
-    public void setPoints(Integer points) {
-        this.points = points;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     public Integer getNoOfGoldBadgeEarned() {
         return noOfGoldBadgeEarned;
     }
@@ -214,29 +221,19 @@ public class Employee {
         this.noOfBronzeBadgeEarned = noOfBronzeBadgeEarned;
     }
 
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", profilePhoto='" + profilePhoto + '\'' +
-                ", email='" + email + '\'' +
-                ", contactNumber='" + contactNumber + '\'' +
-                ", password='" + password + '\'' +
-                ", confirmPassword='" + confirmPassword + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", isActive=" + isActive +
-                ", goldBadgeCount=" + goldBadgeCount +
-                ", silverBadgeCount=" + silverBadgeCount +
-                ", bronzeBadgeCount=" + bronzeBadgeCount +
-                ", noOfGoldBadgeEarned=" + noOfGoldBadgeEarned +
-                ", noOfSilverBadgeEarned=" + noOfSilverBadgeEarned +
-                ", noOfBronzeBadgeEarned=" + noOfBronzeBadgeEarned +
-                ", points=" + points +
-                ", roleSet=" + roleSet +
-                '}';
+    public Integer getPoints() {
+        return points;
     }
 
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public Set<Role> getRoleSet() {
+        return roleSet;
+    }
+
+    public void setRoleSet(Set<Role> roleSet) {
+        this.roleSet = roleSet;
+    }
 }

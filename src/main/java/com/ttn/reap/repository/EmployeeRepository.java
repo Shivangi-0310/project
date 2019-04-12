@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
-    public Optional<Employee> findByEmail(String emailId);
+    public Employee findByEmail(String emailId);
 
     public Optional<List<Employee>> findByFirstName(String firstname);
 
@@ -21,8 +21,13 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     public Optional<List<Employee>> findByEmailLike(String emailPattern);
 
-//    public Optional<List<Employee>> findByName(@Param("name") String name);
+    public Optional<List<Employee>> findByfirstNameStartingWith(String firstName);
+
+    Optional<Employee> findByResetToken(String resetToken);
+
+
+// public Optional<List<Employee>> findBynameNamedNative(@Param("name") String name);
+
+
+
 }
-
-
-

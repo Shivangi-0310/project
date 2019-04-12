@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,17 +23,14 @@ import java.util.Optional;
 public class EmployeeService {
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    EmployeeRepository employeeRepository;
 
     //    saving an employee with other internal details into the db while registration!
     public Employee saveEmployee(Employee employee, MultipartFile multipartFile)
             throws IOException, EmployeeException {
-
-        if (employeeRepository.findByEmail(employee.getEmail()).isPresent()) {
-
+        if (employeeRepository.findByEmail(employee.getEmail()) != null) {
             throw new EmployeeException("Email Already Registered", ExceptionStatus.EMPLOYEE_ALREADY_EXIST);
         }
-
         employee.setActive(Boolean.TRUE);
         employee.getRoleSet().add(Role.USER);
         setBadges(employee);
@@ -47,27 +45,31 @@ public class EmployeeService {
 
     }
 
+    public Employee updateEmployeePassword(Employee employee){
+        return employeeRepository.save(employee);
+    }
+
     //    setting badges employee are allowed to give based on their roles
     Employee setBadges(Employee employee) {
         if (employee.getRoleSet().contains(Role.PRACTICE_HEAD)) {
-            employee.setGoldBadgeCount(9);
-            employee.setSilverBadgeCount(6);
-            employee.setBronzeBadgeCount(3);
-        } else if (employee.getRoleSet().contains(Role.SUPERVISOR)) {
-            employee.setGoldBadgeCount(6);
-            employee.setSilverBadgeCount(3);
-            employee.setBronzeBadgeCount(2);
-        } else {
             employee.setGoldBadgeCount(3);
+            employee.setSilverBadgeCount(6);
+            employee.setBronzeBadgeCount(9);
+        } else if (employee.getRoleSet().contains(Role.SUPERVISOR)) {
+            employee.setGoldBadgeCount(2);
+            employee.setSilverBadgeCount(3);
+            employee.setBronzeBadgeCount(6);
+        } else {
+            employee.setGoldBadgeCount(1);
             employee.setSilverBadgeCount(2);
-            employee.setBronzeBadgeCount(1);
+            employee.setBronzeBadgeCount(3);
         }
         return employee;
     }
 
 
-    //    for calcuting points of employees based on their no of badge earned.
-    public Integer calculatePoints(Employee employee) {
+    //    for calculating points of employees based on their no of badge earned.
+    Integer calculatePoints(Employee employee) {
         Integer points;
         points = employee.getNoOfGoldBadgeEarned() * Badge.GOLD.getBadgeWeight() +
                 employee.getNoOfSilverBadgeEarned() * Badge.SILVER.getBadgeWeight()
@@ -84,7 +86,7 @@ public class EmployeeService {
     //    for checking whether the employee is already registered or not....
     //    for registration and login purpose
     //    also for the search functionality
-    public Optional<Employee> findEmployeeByEmailId(String email) {
+    public Employee findEmployeeByEmailId(String email) {
         return employeeRepository.findByEmail(email);
     }
 
@@ -99,6 +101,11 @@ public class EmployeeService {
         return employeeRepository.findByLastName(lastname);
     }
 
+
+    public Optional findEmployeeByResetToken(String resetToken) {
+        return employeeRepository.findByResetToken(resetToken);
+    }
+
     //    for saving profile picture uploaded by the employee while registration
     public String saveProfilePhotoPath(MultipartFile profilePhoto) throws IOException {
 
@@ -111,7 +118,7 @@ public class EmployeeService {
         return "/emp-imgs/" + profilePhoto.getOriginalFilename();
     }
 
-
+    //    for verifying login credentials for successful login
     public Employee loginEmployee(String email, String password) throws EmployeeException {
 
         Optional<Employee> employee = employeeRepository.findByEmailAndPassword(email, password);
@@ -119,8 +126,24 @@ public class EmployeeService {
             throw new EmployeeException("Invalid Credentials", ExceptionStatus.INVALID_DETAILS);
         }
         return employee.get();
-
     }
 
-
+//    public List<EmployeeSearchDTO> findByFirstnameStartingWith(String firstName) throws EmployeeException {
+//        Optional<List<Employee>> employees = employeeRepository.findByfirstNameStartingWith(firstName);
+//
+//        if (!employees.isPresent()) {
+//            throw new EmployeeException("No Data found", ExceptionStatus.NO_DATA_FOUND);
+//        }
+//        List<EmployeeSearchDTO> empData = new ArrayList<>();
+//        employees.get().stream().forEach(employee -> {
+//            EmployeeSearchDTO emp = new EmployeeSearchDTO();
+//            emp.setFullName(employee.getFirstName() + " " + employee.getLastName());
+//            emp.setEmail(employee.getEmail());
+//            emp.setProfilePic(employee.getProfilePhoto());
+//            empData.add(emp);
+//        });
+//
+//        return empData;
+//
+//    }
 }

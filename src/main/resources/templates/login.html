@@ -67,11 +67,11 @@
             style="margin-right: 10px; width: 150px; height: 30px; color: blue;  font-size: 15px;
              background-color: white; border-color: white; border-radius: 0px">Forget Password?
     </button>
-    <div class="modal fade" id="myModal" role="dialog">
+    <!--<div class="modal fade" id="myModal" role="dialog">
 
         <div class="modal-dialog">
-
-            <!-- Modal content-->
+               divdiv
+            &lt;!&ndash; Modal content&ndash;&gt;
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" style="float: right;">&times;</button>
@@ -79,17 +79,17 @@
                 </div>
                 <div class="modal-body" style="height: 150px">
                     <div id="forget password">
-                        <div class="form-content" style="padding: 10px 10px 5px 20px;">
+               div         <div class="form-content" style="padding: 10px 10px 5px 20px;">
 
-                            <form action="">
+                            <form th:action="@{'/forgotpassword'}" th:object="${employee}" method="post">
                                 <div class="wrapper">
                                     <div class="form-element">
-                                        <label>Email: <sup>*</sup></label>
-                                        <input type="text" name="email" required>
+                                        <label for="email">Email: <sup>*</sup></label>
+                                        <input type="text" name="email" required th:field="*{email}" id="email">
                                     </div>
-                                    <input id="submit" type="submit" class="btn btn-primary"
+                                    <button id="submit" type="submit" class="btn btn-primary"
                                            style="float:right;height: 35px"
-                                           value="Reset Password">
+                                            value="Reset Password"> </button>
                                 </div>
                             </form>
                         </div>
@@ -98,8 +98,49 @@
             </div>
         </div>
 
+    </div>-->
+    !-- FORGOT PASSWORD MODAL SECTION -->
+    <div class="modal fade" id="myModal" role="dialog" >
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Forgot Password</h4>
+        </div>
+        <div class="modal-body">
+            <p>Enter your Email address and we'll send you a link to reset your password!</p>
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                    <form class="form-horizontal" th:action="@{/reap/forgotpwd}" autocomplete="on" method="post">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="email-pwd">Email:</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="email-pwd" name="email-pwd" required>
+                            </div>
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <div class="form-group">
+
+                                <button type="submit" class="btn btn-primary">Send Password</button>
+
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        </div>
     </div>
 
 </div>
+</div>
+
 </body>
 </html>
